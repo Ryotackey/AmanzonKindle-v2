@@ -1,0 +1,8 @@
+name: AmanzonKindle
+version: ${project.version}
+main: red.man10.amanzonkindle.AmanzonKindle
+api-version: 1.17
+commands:
+  amk:
+    description: Command no setsumei
+    usage: /<command>
