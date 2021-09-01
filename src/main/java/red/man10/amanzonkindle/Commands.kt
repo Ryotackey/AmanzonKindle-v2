@@ -18,8 +18,7 @@ class Commands(val pl: AmanzonKindle): CommandExecutor {
 
             0->{
 
-                val gui = GUIProcess(pl)
-                val inv = gui.menuGUI()
+                val inv = pl.gui.menuGUI()
                 s.openInventory(inv)
 
                 return true

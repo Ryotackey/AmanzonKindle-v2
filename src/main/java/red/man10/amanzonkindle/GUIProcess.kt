@@ -1,9 +1,9 @@
 package red.man10.amanzonkindle
 
-import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.inventory.Inventory
+import org.bukkit.inventory.ItemStack
 import kotlin.math.floor
 
 class GUIProcess(val pl: AmanzonKindle) {
@@ -29,11 +29,11 @@ class GUIProcess(val pl: AmanzonKindle) {
         val dlrank = ItemStackA(Material.COMPASS, 0, 1, "§a§lDL数順で本を探す").build()
         inv.setItem(29, dlrank)
 
-        val like = ItemStackA(Material.REDSTONE, 0, 1, "§a§lDL数順で本を探す").build()
-        inv.setItem(30, like)
+        val like = ItemStackA(Material.REDSTONE, 0, 1, "§a§lいいね数順で本を探す").build()
+        inv.setItem(31, like)
 
         val mypage = ItemStackA(Material.CHEST, 0, 1, "§a§lマイページ").build()
-        inv.setItem(32, mypage)
+        inv.setItem(33, mypage)
 
         return inv
 
@@ -65,13 +65,33 @@ class GUIProcess(val pl: AmanzonKindle) {
 
         for (i in 0 until 45){
 
-            if (list.size >= i+page*45) inv.setItem(i, list[i+page*45])
+            if (list.size > i+page*45) inv.setItem(i, list[i+page*45])
 
         }
 
         p.openInventory(inv)
 
         return
+
+    }
+
+    fun buyGUI(book: ItemStack): Inventory{
+
+        val inv = pl.server.createInventory(null, 45, "§e§l購入確認")
+
+        val blank = ItemStackA(Material.BLACK_STAINED_GLASS_PANE, 1, 1, "").build()
+        val accept = ItemStackA(Material.LIME_STAINED_GLASS_PANE, 1, 1, "§a§l購入する").build()
+        val reject = ItemStackA(Material.RED_STAINED_GLASS_PANE, 1, 1, "§c§lやめる").build()
+
+        for (i in 0 until inv.size){
+            inv.setItem(i, blank)
+        }
+
+        inv.setItem(13, book)
+        inv.setItem(30, accept)
+        inv.setItem(32, reject)
+
+        return inv
 
     }
 
