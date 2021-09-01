@@ -58,7 +58,7 @@ class VaultManager(private val plugin: AmanzonKindle) {
         val resp = economy!!.withdrawPlayer(p, money)
         if (resp.transactionSuccess()) {
             if (p.isOnline) {
-                p.player!!.sendMessage(ChatColor.YELLOW.toString() + "電子マネーを${plugin.format(money)}円使いました")
+                p.player!!.sendMessage(ChatColor.YELLOW.toString() + "電子マネーを${plugin.util.format(money)}円使いました")
             }
             return true
         }
@@ -78,7 +78,7 @@ class VaultManager(private val plugin: AmanzonKindle) {
         val resp = economy!!.depositPlayer(p, money)
         if (resp.transactionSuccess()) {
             if (p.isOnline) {
-                p.player!!.sendMessage(ChatColor.YELLOW.toString() + "電子マネーを${plugin.format(money)}円受け取りました。")
+                p.player!!.sendMessage(ChatColor.YELLOW.toString() + "電子マネーを${plugin.util.format(money)}円受け取りました。")
             }
             return true
         }
