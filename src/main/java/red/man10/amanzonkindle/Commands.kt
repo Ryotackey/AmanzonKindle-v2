@@ -25,7 +25,9 @@ class Commands(val pl: AmanzonKindle): CommandExecutor {
 
             }
 
-            1->{}
+            1->{
+
+            }
 
             2->{
 

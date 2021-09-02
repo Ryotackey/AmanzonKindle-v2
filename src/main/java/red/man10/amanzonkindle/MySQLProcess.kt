@@ -118,7 +118,7 @@ class BuyBook(val pl: AmanzonKindle, val p: Player, val item: ItemStack): Thread
         rs.close()
 
         if (pl.v!!.getBalance(p.uniqueId) < price){
-            p.sendMessage("${pl.prefix}§c電子マネーが足りません")
+            p.sendMessage("${pl.prefix}§c電子マネーが足りません。")
             return
         }
 
@@ -127,7 +127,7 @@ class BuyBook(val pl: AmanzonKindle, val p: Player, val item: ItemStack): Thread
         count.next()
 
         if (count.getInt("count(1)") != 0) {
-            p.sendMessage("${pl.prefix}§cあなたはすでにその本を持っています")
+            p.sendMessage("${pl.prefix}§cあなたはすでにその本を持っています。")
             return
         }
 

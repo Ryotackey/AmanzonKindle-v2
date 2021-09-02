@@ -1,10 +1,12 @@
 package red.man10.amanzonkindle
 
+import net.wesjd.anvilgui.AnvilGUI
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.inventory.InventoryClickEvent
+import org.bukkit.inventory.meta.BookMeta
 
 class Events(val pl: AmanzonKindle): Listener {
 
@@ -34,6 +36,37 @@ class Events(val pl: AmanzonKindle): Listener {
 
                     "§a§l題名で本を探す"->{
 
+                    }
+
+                    "§a§l出版する"->{
+
+                        if (!p.hasPermission("amk.publish")){
+                            p.sendMessage("${pl.prefix}§cあなたには出版する権限がありません。")
+                            return
+                        }
+
+                        val book = p.inventory.itemInMainHand
+
+                        if (book.type != Material.WRITTEN_BOOK){
+                            p.sendMessage("${pl.prefix}§c出版する本を手に持ってください。")
+                            return
+                        }
+
+                        val bmeta = book.itemMeta as BookMeta
+
+                        if (!bmeta.hasAuthor() || bmeta.author!! != p.name){
+                            p.sendMessage("${pl.prefix}§c本を書いた本人しか出版できません。")
+                            return
+                        }
+
+                        if (bmeta.generation != null && bmeta.generation != BookMeta.Generation.ORIGINAL){
+                            p.sendMessage("${pl.prefix}§cオリジナルの本しか出版できません。")
+                            return
+                        }
+
+                        pl.gui.categoryGUI(p, book)
+
+                        return
                     }
 
                 }
