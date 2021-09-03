@@ -4,7 +4,15 @@ main: red.man10.amanzonkindle.AmanzonKindle
 api-version: 1.17
 softdepend:
   - Vault
+  - Man10Bank
 commands:
   amk:
     description: Command no setsumei
     usage: /<command>
+permissions:
+  amk.op:
+    default: op
+  amk.publish:
+    default: true
+  amk.user:
+    default: true

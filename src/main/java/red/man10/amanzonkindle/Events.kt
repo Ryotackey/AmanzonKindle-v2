@@ -18,6 +18,8 @@ class Events(val pl: AmanzonKindle): Listener {
         val p = e.whoClicked as Player
         val title = e.view.title
 
+        if (e.clickedInventory == p.inventory) return
+
         when (title){
             "§e§lA§d§lm§a§la§f§ln§e§lzonKindle"->{
 
@@ -43,6 +45,11 @@ class Events(val pl: AmanzonKindle): Listener {
                     "§a§l著者名で本を探す"->{
                         p.closeInventory()
                         pl.gui.searchGUI(p, "author")
+                    }
+
+                    "§a§lカテゴリで本を探す"->{
+                        p.closeInventory()
+                        pl.gui.searchGUI(p, "category")
                     }
 
                     "§a§lDL数順で本を探す"->{

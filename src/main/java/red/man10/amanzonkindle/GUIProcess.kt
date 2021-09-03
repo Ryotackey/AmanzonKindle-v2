@@ -17,19 +17,22 @@ class GUIProcess(val pl: AmanzonKindle) {
 
         val inv = pl.server.createInventory(null, 45, "§e§lA§d§lm§a§la§f§ln§e§lzonKindle")
 
-        val brank = ItemStackA(Material.BLACK_STAINED_GLASS_PANE, 0, 1, "").build()
+        val brank = ItemStackA(Material.BLACK_STAINED_GLASS_PANE, 0, 1, " ").build()
         for (i in 0 until inv.size){
             inv.setItem(i, brank)
         }
 
         val allbooks = ItemStackA(Material.BOOK, 0, 1, "§a§l出版されている本一覧").build()
-        inv.setItem(11, allbooks)
+        inv.setItem(10, allbooks)
 
         val title = ItemStackA(Material.OAK_SIGN, 0, 1, "§a§l題名で本を探す").build()
-        inv.setItem(13, title)
+        inv.setItem(12, title)
 
         val author = ItemStackA(Material.NAME_TAG, 0, 1, "§a§l著者名で本を探す").build()
-        inv.setItem(15, author)
+        inv.setItem(14, author)
+
+        val cate = ItemStackA(Material.WRITABLE_BOOK, 0, 1, "§a§lカテゴリで本を探す").build()
+        inv.setItem(16, cate)
 
         val dlrank = ItemStackA(Material.COMPASS, 0, 1, "§a§lDL数順で本を探す").build()
         inv.setItem(28, dlrank)
@@ -63,7 +66,7 @@ class GUIProcess(val pl: AmanzonKindle) {
 
         val next = ItemStackA(Material.WHITE_STAINED_GLASS_PANE, 1, 1, "§f次のページへ").build()
         val pre = ItemStackA(Material.WHITE_STAINED_GLASS_PANE, 1, 1, "§f前のページへ").build()
-        val blank = ItemStackA(Material.BLACK_STAINED_GLASS_PANE, 1, 1, "").build()
+        val blank = ItemStackA(Material.BLACK_STAINED_GLASS_PANE, 1, 1, " ").build()
         val pagei = ItemStackA(Material.YELLOW_STAINED_GLASS_PANE, 1, 1, page.toString()).build()
 
         for (i in 45 until 54){
@@ -74,9 +77,13 @@ class GUIProcess(val pl: AmanzonKindle) {
         if (floor(list.size/45.0).toInt() != page) inv.setItem(53, next)
         if (page != 0) inv.setItem(45, pre)
 
+        val glass = ItemStackA(Material.GLASS_PANE, 1, 1, " ").build()
+
         for (i in 0 until 45){
 
-            if (list.size > i+page*45) inv.setItem(i, list[i+page*45])
+            if (list.size > i+page*45){
+                inv.setItem(i, list[i+page*45])
+            }else inv.setItem(i, glass)
 
         }
 
@@ -90,7 +97,7 @@ class GUIProcess(val pl: AmanzonKindle) {
 
         val inv = pl.server.createInventory(null, 45, "§e§l購入確認")
 
-        val blank = ItemStackA(Material.BLACK_STAINED_GLASS_PANE, 1, 1, "").build()
+        val blank = ItemStackA(Material.BLACK_STAINED_GLASS_PANE, 1, 1, " ").build()
         val accept = ItemStackA(Material.LIME_STAINED_GLASS_PANE, 1, 1, "§a§l購入する").build()
         val reject = ItemStackA(Material.RED_STAINED_GLASS_PANE, 1, 1, "§c§lやめる").build()
 
@@ -120,7 +127,7 @@ class GUIProcess(val pl: AmanzonKindle) {
 
             }
             .text("カテゴリをここに入力") //sets the text the GUI should start with
-            .itemLeft(ItemStack(Material.PAPER)) //use a custom item for the first slot
+            .itemLeft(ItemStackA(Material.PAPER, 1, 1, "", pl.catelist).build()) //use a custom item for the first slot
             .title("出版処理") //set the title of the GUI (only works in 1.14+)
             .plugin(pl) //set the plugin instance
             .open(p) //opens the GUI for the player provided
@@ -143,6 +150,8 @@ class GUIProcess(val pl: AmanzonKindle) {
                 }catch (e: NumberFormatException){
                     return@onComplete AnvilGUI.Response.text("数字で入力してください")
                 }
+
+                if (price < 0) return@onComplete AnvilGUI.Response.text("0円以上に設定してください")
 
                 val bmeta = book.itemMeta as BookMeta
 
@@ -200,7 +209,7 @@ class GUIProcess(val pl: AmanzonKindle) {
 
         val like = book.itemMeta!!.lore!![0].contains("済")
 
-        val blank = ItemStackA(Material.BLACK_STAINED_GLASS_PANE, 1, 1, "").build()
+        val blank = ItemStackA(Material.BLACK_STAINED_GLASS_PANE, 1, 1, " ").build()
         val read = ItemStackA(Material.LIME_STAINED_GLASS_PANE, 1, 1, "§a§l本を読む").build()
         val likei = if (like) ItemStackA(Material.PINK_STAINED_GLASS_PANE, 1, 1, "§c§lいいね!を解除する").build()
                     else ItemStackA(Material.WHITE_STAINED_GLASS_PANE, 1, 1, "§d§lいいね!する").build()

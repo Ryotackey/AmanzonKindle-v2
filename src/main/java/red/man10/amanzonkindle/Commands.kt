@@ -14,6 +14,8 @@ class Commands(val pl: AmanzonKindle): CommandExecutor {
 
         if (s !is Player) return true
 
+        if(!s.hasPermission("amk.user")) return true
+
         when(args.size){
 
             0->{
@@ -26,6 +28,30 @@ class Commands(val pl: AmanzonKindle): CommandExecutor {
             }
 
             1->{
+
+                if (args[0] == "help"){
+                    if(!s.hasPermission("amk.op")) return true
+                    s.sendMessage("§f§l--------------§e§lA§d§lm§a§la§f§ln§e§lzonKindle§f§l--------------")
+                    s.sendMessage("§d§l/amk reload§f§l: configの設定をリロードする。")
+                    s.sendMessage("ただ、opを持っていて「本一覧」というインベントリでマウスホイールクリックした場合、\n" +
+                            "公開⇔非公開設定ができます。\n" +
+                            "非公開にした本は権限持ち以外からは買えないし、買っていても読めないので、\n" +
+                            "やばい本があったらそれで止めてください。\n" +
+                            "非公開の本はloreに「非公開」と書かれます。")
+
+                    return true
+
+                }
+
+                if (args[0] == "reload"){
+
+                    pl.loadConfig()
+
+                    s.sendMessage("${pl.prefix}§areload complete")
+
+                    return true
+
+                }
 
             }
 

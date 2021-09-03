@@ -22,6 +22,8 @@ class AmanzonKindle: JavaPlugin() {
     val gui = GUIProcess(this)
     val util = Utility()
 
+    var cost = 10000.0
+
     override fun onEnable() {
         saveDefaultConfig()
 
@@ -34,7 +36,7 @@ class AmanzonKindle: JavaPlugin() {
 
         bank = BankAPI(this)
 
-        if (config.contains("category")) catelist = config.getList("category") as MutableList<String>
+        loadConfig()
 
     }
 
@@ -42,6 +44,13 @@ class AmanzonKindle: JavaPlugin() {
 
     }
 
+    fun loadConfig(){
 
+        reloadConfig()
+
+        if (config.contains("category")) catelist = config.getList("category") as MutableList<String>
+
+        if (config.contains("publish_cost")) cost = config.getDouble("publish_cost")
+    }
 
 }

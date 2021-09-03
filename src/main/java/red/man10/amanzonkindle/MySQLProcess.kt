@@ -29,6 +29,13 @@ class PublishBook(val pl: AmanzonKindle, val p: Player, val price: Double, val c
 
         rs.close()
 
+        if (pl.v!!.getBalance(p.uniqueId) < pl.cost){
+            p.sendMessage("${pl.prefix}§cお金が足りないので出版できません。(手数料: ${pl.util.format(pl.cost)}円)")
+            return
+        }
+
+        pl.v!!.withdraw(p.uniqueId, pl.cost)
+
         pl.mysql!!.execute("INSERT INTO `kindle_library` (`title`, `price`, `author`, `author_uuid`, `item`, " +
                 "`category`, `sold_amount`, `likes`, `public`) " +
                 "VALUES ('${bmeta.title}', '$price', '${p.name}', '${p.uniqueId}', '$base64', '$cate', 0, 0, true);")
@@ -47,9 +54,9 @@ class SearchBook(val pl: AmanzonKindle, val p: Player, val bypass: Boolean, val 
     override fun run() {
 
         val rs = if (bypass){
-            pl.mysql!!.query("SELECT * FROM kindle_library where $column='$key';")?: return
+            pl.mysql!!.query("SELECT * FROM kindle_library where $column like '%$key%';")?: return
         }else{
-            pl.mysql!!.query("SELECT * FROM kindle_library where public=true and $column='$key';")?: return
+            pl.mysql!!.query("SELECT * FROM kindle_library where public=true and $column like '%$key%';")?: return
         }
 
         pl.pagemap[p] = pl.util.createBookList(rs)
