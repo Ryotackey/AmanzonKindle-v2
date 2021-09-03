@@ -80,6 +80,12 @@ class Events(val pl: AmanzonKindle): Listener {
                         return
                     }
 
+                    "§a§l本棚"->{
+                        p.closeInventory()
+                        val get = GetOwnBook(pl, p)
+                        get.start()
+                    }
+
                 }
 
                 return
@@ -102,11 +108,11 @@ class Events(val pl: AmanzonKindle): Listener {
                 when(item.itemMeta!!.displayName){
 
                     "§f前のページへ"->{
-                        pl.gui.storeGUI(p, page-1)
+                        pl.gui.pageGUI(p, page-1, "§e§l本一覧")
                     }
 
                     "§f次のページへ"->{
-                        pl.gui.storeGUI(p, page+1)
+                        pl.gui.pageGUI(p, page+1, "§e§l本一覧")
                     }
 
                 }
@@ -143,9 +149,43 @@ class Events(val pl: AmanzonKindle): Listener {
 
                     "§c§lやめる"->{
                         p.closeInventory()
-                        pl.gui.storeGUI(p, 0)
+                        pl.gui.pageGUI(p, 0, "§e§l本一覧")
                     }
 
+                }
+
+                return
+
+            }
+
+            "§e§l本棚"->{
+
+                e.isCancelled = true
+
+                val inv = e.inventory
+                val page = inv.getItem(49)!!.itemMeta!!.displayName.toInt()
+
+                val item = e.currentItem
+
+                if (e.currentItem == null) return
+
+                if (!item!!.hasItemMeta()) return
+
+                when(item.itemMeta!!.displayName){
+
+                    "§f前のページへ"->{
+                        pl.gui.pageGUI(p, page-1, "§e§l本棚")
+                    }
+
+                    "§f次のページへ"->{
+                        pl.gui.pageGUI(p, page+1, "§e§l本棚")
+                    }
+
+                }
+
+                if (item.type == Material.WRITTEN_BOOK){
+                    p.closeInventory()
+                    p.openBook(item)
                 }
 
                 return

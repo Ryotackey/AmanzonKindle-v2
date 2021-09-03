@@ -39,14 +39,17 @@ class GUIProcess(val pl: AmanzonKindle) {
         val publish = ItemStackA(Material.DISPENSER, 1, 1, "§a§l本を出版する").build()
         inv.setItem(32, publish)
 
-        val mypage = ItemStackA(Material.CHEST, 0, 1, "§a§lマイページ").build()
-        inv.setItem(34, mypage)
+        //val mypage = ItemStackA(Material.CHEST, 0, 1, "§a§lマイページ").build()
+        //inv.setItem(34, mypage)
+
+        val bookshelf = ItemStackA(Material.BOOKSHELF, 0, 1, "§a§l本棚").build()
+        inv.setItem(34, bookshelf)
 
         return inv
 
     }
 
-    fun storeGUI(p: Player, page: Int){
+    fun pageGUI(p: Player, page: Int, title: String){
 
         val list = pl.pagemap[p]
 
@@ -55,7 +58,7 @@ class GUIProcess(val pl: AmanzonKindle) {
             return
         }
 
-        val inv = pl.server.createInventory(null, 54, "§e§l本一覧")
+        val inv = pl.server.createInventory(null, 54, title)
 
         val next = ItemStackA(Material.WHITE_STAINED_GLASS_PANE, 1, 1, "§f次のページへ").build()
         val pre = ItemStackA(Material.WHITE_STAINED_GLASS_PANE, 1, 1, "§f前のページへ").build()

@@ -1,6 +1,7 @@
 package red.man10.amanzonkindle
 
 import org.bukkit.Bukkit
+import org.bukkit.entity.Item
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.BookMeta
@@ -56,7 +57,7 @@ class SearchBook(val pl: AmanzonKindle, val p: Player, val bypass: Boolean, val 
         object : BukkitRunnable(){
 
             override fun run() {
-                pl.gui.storeGUI(p, 0)
+                pl.gui.pageGUI(p, 0, "§e§l本一覧")
             }
 
         }.runTask(pl)
@@ -80,7 +81,7 @@ class GetBook(val pl: AmanzonKindle, val p: Player, val bypass: Boolean): Thread
         object : BukkitRunnable(){
 
             override fun run() {
-                pl.gui.storeGUI(p, 0)
+                pl.gui.pageGUI(p, 0, "§e§l本一覧")
             }
 
         }.runTask(pl)
@@ -122,7 +123,7 @@ class BuyBook(val pl: AmanzonKindle, val p: Player, val item: ItemStack): Thread
             return
         }
 
-        val count = pl.mysql!!.query("select count(1) from kindle_user where book_id=$id and uuid='${p.uniqueId}'")?: return
+        val count = pl.mysql!!.query("select count(1) from kindle_user where book_id=$id and uuid='${p.uniqueId}';")?: return
 
         count.next()
 
@@ -142,6 +143,41 @@ class BuyBook(val pl: AmanzonKindle, val p: Player, val item: ItemStack): Thread
         pl.bank!!.deposit(UUID.fromString(uuid), price, "「$title」の印税")
 
         return
+
+    }
+
+}
+
+class GetOwnBook(val pl: AmanzonKindle, val p: Player): Thread(){
+
+    override fun run() {
+
+        val rs = pl.mysql!!.query("select * from kindle_user where uuid='${p.uniqueId}';")?: return
+
+        val list = mutableListOf<ItemStack>()
+
+        while (rs.next()){
+
+            val id = rs.getInt("book_id")
+
+            val bookrs = pl.mysql !!.query("select * from kindle_library where id=$id;")?: return
+            bookrs.next()
+
+            val book = pl.util.itemFromBase64(bookrs.getString("item"))?: return
+
+            list.add(book)
+
+        }
+
+        pl.pagemap[p] = list
+
+        object : BukkitRunnable(){
+
+            override fun run() {
+                pl.gui.pageGUI(p, 0, "§e§l本棚")
+            }
+
+        }.runTask(pl)
 
     }
 
