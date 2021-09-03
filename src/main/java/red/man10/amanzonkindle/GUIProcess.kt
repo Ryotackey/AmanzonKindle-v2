@@ -1,6 +1,7 @@
 package red.man10.amanzonkindle
 
 import net.wesjd.anvilgui.AnvilGUI
+import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.inventory.Inventory
@@ -33,7 +34,7 @@ class GUIProcess(val pl: AmanzonKindle) {
         val dlrank = ItemStackA(Material.COMPASS, 0, 1, "§a§lDL数順で本を探す").build()
         inv.setItem(28, dlrank)
 
-        val like = ItemStackA(Material.REDSTONE, 0, 1, "§a§lいいね数順で本を探す").build()
+        val like = ItemStackA(Material.REDSTONE, 0, 1, "§a§lいいね!数順で本を探す").build()
         inv.setItem(30, like)
 
         val publish = ItemStackA(Material.DISPENSER, 1, 1, "§a§l本を出版する").build()
@@ -190,6 +191,29 @@ class GUIProcess(val pl: AmanzonKindle) {
             .open(p) //opens the GUI for the player provided
 
         return
+
+    }
+
+    fun ownBookGUI(book: ItemStack): Inventory{
+
+        val inv = Bukkit.createInventory(null, 45, "§e§l本を読む")
+
+        val like = book.itemMeta!!.lore!![0].contains("済")
+
+        val blank = ItemStackA(Material.BLACK_STAINED_GLASS_PANE, 1, 1, "").build()
+        val read = ItemStackA(Material.LIME_STAINED_GLASS_PANE, 1, 1, "§a§l本を読む").build()
+        val likei = if (like) ItemStackA(Material.PINK_STAINED_GLASS_PANE, 1, 1, "§c§lいいね!を解除する").build()
+                    else ItemStackA(Material.WHITE_STAINED_GLASS_PANE, 1, 1, "§d§lいいね!する").build()
+
+        for (i in 0 until inv.size){
+            inv.setItem(i, blank)
+        }
+
+        inv.setItem(13, book)
+        inv.setItem(30, read)
+        inv.setItem(32, likei)
+
+        return inv
 
     }
 

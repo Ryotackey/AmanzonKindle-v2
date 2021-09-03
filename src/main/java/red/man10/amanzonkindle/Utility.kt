@@ -80,7 +80,7 @@ class Utility {
             val dl = rs.getInt("sold_amount")
             lore.add("§bDL数: ${dl}DL")
 
-            val fav = rs.getInt("review")
+            val fav = rs.getInt("likes")
             lore.add("§dいいね!数: ${fav}いいね!")
 
             val cate = rs.getString("category")
