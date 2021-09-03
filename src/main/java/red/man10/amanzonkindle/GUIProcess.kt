@@ -36,7 +36,7 @@ class GUIProcess(val pl: AmanzonKindle) {
         val like = ItemStackA(Material.REDSTONE, 0, 1, "§a§lいいね数順で本を探す").build()
         inv.setItem(30, like)
 
-        val publish = ItemStackA(Material.DISPENSER, 1, 1, "§a§l出版する").build()
+        val publish = ItemStackA(Material.DISPENSER, 1, 1, "§a§l本を出版する").build()
         inv.setItem(32, publish)
 
         val mypage = ItemStackA(Material.CHEST, 0, 1, "§a§lマイページ").build()
@@ -161,6 +161,28 @@ class GUIProcess(val pl: AmanzonKindle) {
             .text("値段をここに入力") //sets the text the GUI should start with
             .itemLeft(ItemStack(Material.WRITTEN_BOOK)) //use a custom item for the first slot
             .title("出版処理") //set the title of the GUI (only works in 1.14+)
+            .plugin(pl) //set the plugin instance
+            .open(p) //opens the GUI for the player provided
+
+        return
+
+    }
+
+    fun searchGUI(p: Player, column: String){
+
+        AnvilGUI.Builder()
+
+            .onComplete { _: Player, text: String ->                                     //called when the inventory output slot is clicked
+
+                val search = SearchBook(pl, p, p.hasPermission("amk.op"), column, text)
+                search.start()
+
+                return@onComplete AnvilGUI.Response.close()
+
+            }
+            .text("キーワードをここに入力") //sets the text the GUI should start with
+            .itemLeft(ItemStack(Material.COMPASS)) //use a custom item for the first slot
+            .title("本を検索する") //set the title of the GUI (only works in 1.14+)
             .plugin(pl) //set the plugin instance
             .open(p) //opens the GUI for the player provided
 

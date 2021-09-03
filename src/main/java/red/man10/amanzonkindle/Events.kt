@@ -30,18 +30,26 @@ class Events(val pl: AmanzonKindle): Listener {
                 when(e.currentItem!!.itemMeta!!.displayName){
 
                     "§a§l出版されている本一覧"->{
+                        p.closeInventory()
                         val getbook = GetBook(pl, p, p.hasPermission("amk.op"))
                         getbook.start()
                     }
 
                     "§a§l題名で本を探す"->{
-
+                        p.closeInventory()
+                        pl.gui.searchGUI(p, "title")
                     }
 
-                    "§a§l出版する"->{
+                    "§a§l著者名で本を探す"->{
+                        p.closeInventory()
+                        pl.gui.searchGUI(p, "author")
+                    }
 
+                    "§a§l本を出版する"->{
+                        p.closeInventory()
                         if (!p.hasPermission("amk.publish")){
                             p.sendMessage("${pl.prefix}§cあなたには出版する権限がありません。")
+                            p.closeInventory()
                             return
                         }
 
@@ -49,6 +57,7 @@ class Events(val pl: AmanzonKindle): Listener {
 
                         if (book.type != Material.WRITTEN_BOOK){
                             p.sendMessage("${pl.prefix}§c出版する本を手に持ってください。")
+                            p.closeInventory()
                             return
                         }
 
@@ -56,11 +65,13 @@ class Events(val pl: AmanzonKindle): Listener {
 
                         if (!bmeta.hasAuthor() || bmeta.author!! != p.name){
                             p.sendMessage("${pl.prefix}§c本を書いた本人しか出版できません。")
+                            p.closeInventory()
                             return
                         }
 
                         if (bmeta.generation != null && bmeta.generation != BookMeta.Generation.ORIGINAL){
                             p.sendMessage("${pl.prefix}§cオリジナルの本しか出版できません。")
+                            p.closeInventory()
                             return
                         }
 
@@ -70,8 +81,6 @@ class Events(val pl: AmanzonKindle): Listener {
                     }
 
                 }
-
-                p.closeInventory()
 
                 return
 
