@@ -116,7 +116,7 @@ class Events(val pl: AmanzonKindle): Listener {
                 e.isCancelled = true
 
                 val inv = e.inventory
-                val page = inv.getItem(49)!!.itemMeta!!.displayName.toInt()
+                val page = inv.getItem(49)!!.itemMeta!!.lore!![0].toInt()
 
                 val item = e.currentItem
 
@@ -132,6 +132,11 @@ class Events(val pl: AmanzonKindle): Listener {
 
                     "§f次のページへ"->{
                         pl.gui.pageGUI(p, page+1, "§e§l本一覧")
+                    }
+
+                    "§fメインメニューに戻る"->{
+                        p.closeInventory()
+                        p.openInventory(pl.gui.menuGUI())
                     }
 
                 }
@@ -198,7 +203,7 @@ class Events(val pl: AmanzonKindle): Listener {
                 e.isCancelled = true
 
                 val inv = e.inventory
-                val page = inv.getItem(49)!!.itemMeta!!.displayName.toInt()
+                val page = inv.getItem(49)!!.itemMeta!!.lore!![0].toInt()
 
                 val item = e.currentItem
 
@@ -214,6 +219,11 @@ class Events(val pl: AmanzonKindle): Listener {
 
                     "§f次のページへ"->{
                         pl.gui.pageGUI(p, page+1, "§e§l本棚")
+                    }
+
+                    "§fメインメニューに戻る"->{
+                        p.closeInventory()
+                        p.openInventory(pl.gui.menuGUI())
                     }
 
                 }
@@ -254,9 +264,14 @@ class Events(val pl: AmanzonKindle): Listener {
                     }
 
                     "§d§lいいね!する"->{
-                        p.closeInventory()
                         val lp = LikeProcess(pl, p, book, true)
                         lp.start()
+                    }
+
+                    "§c§lキャンセル"->{
+                        p.closeInventory()
+                        val get = GetOwnBook(pl, p)
+                        get.start()
                     }
 
                 }

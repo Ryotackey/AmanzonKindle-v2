@@ -67,7 +67,7 @@ class GUIProcess(val pl: AmanzonKindle) {
         val next = ItemStackA(Material.WHITE_STAINED_GLASS_PANE, 1, 1, "§f次のページへ").build()
         val pre = ItemStackA(Material.WHITE_STAINED_GLASS_PANE, 1, 1, "§f前のページへ").build()
         val blank = ItemStackA(Material.BLACK_STAINED_GLASS_PANE, 1, 1, " ").build()
-        val pagei = ItemStackA(Material.YELLOW_STAINED_GLASS_PANE, 1, 1, page.toString()).build()
+        val pagei = ItemStackA(Material.YELLOW_STAINED_GLASS_PANE, 1, 1, "§fメインメニューに戻る", mutableListOf(page.toString())).build()
 
         for (i in 45 until 54){
             inv.setItem(i, blank)
@@ -205,22 +205,24 @@ class GUIProcess(val pl: AmanzonKindle) {
 
     fun ownBookGUI(book: ItemStack): Inventory{
 
-        val inv = Bukkit.createInventory(null, 45, "§e§l本を読む")
+        val inv = Bukkit.createInventory(null, 54, "§e§l本を読む")
 
-        val like = book.itemMeta!!.lore!![0].contains("済")
+        val like = book.itemMeta!!.lore!![3].contains("済")
 
         val blank = ItemStackA(Material.BLACK_STAINED_GLASS_PANE, 1, 1, " ").build()
         val read = ItemStackA(Material.LIME_STAINED_GLASS_PANE, 1, 1, "§a§l本を読む").build()
         val likei = if (like) ItemStackA(Material.PINK_STAINED_GLASS_PANE, 1, 1, "§c§lいいね!を解除する").build()
                     else ItemStackA(Material.WHITE_STAINED_GLASS_PANE, 1, 1, "§d§lいいね!する").build()
+        val cancel = ItemStackA(Material.RED_STAINED_GLASS_PANE, 1, 1, "§c§lキャンセル").build()
 
         for (i in 0 until inv.size){
             inv.setItem(i, blank)
         }
 
         inv.setItem(13, book)
-        inv.setItem(30, read)
-        inv.setItem(32, likei)
+        inv.setItem(38, read)
+        inv.setItem(40, likei)
+        inv.setItem(42, cancel)
 
         return inv
 

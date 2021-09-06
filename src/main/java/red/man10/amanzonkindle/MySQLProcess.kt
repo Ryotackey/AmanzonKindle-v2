@@ -177,6 +177,16 @@ class GetOwnBook(val pl: AmanzonKindle, val p: Player): Thread(){
             val book = pl.util.itemFromBase64(bookrs.getString("item"))?: return
             val meta = book.itemMeta!!
             val lore = mutableListOf<String>()
+
+            val dl = bookrs.getInt("sold_amount")
+            lore.add("§bDL数: ${dl}DL")
+
+            val fav = bookrs.getInt("likes")
+            lore.add("§dいいね!数: ${fav}いいね!")
+
+            val cate = bookrs.getString("category")
+            lore.add("§e${cate}")
+
             if (rs.getBoolean("likes")){
                 lore.add("§dいいね！済")
             }else{
@@ -227,16 +237,36 @@ class LikeProcess(val pl: AmanzonKindle, val p: Player, val item: ItemStack, val
 
         rs.close()
 
+        val item1 = item.clone()
+        val meta1 = item1.itemMeta!!
+        val lore = meta1.lore
+
+
         if (like){
             pl.mysql!!.execute("UPDATE kindle_user SET likes=true WHERE (book_id='$id' and uuid='${p.uniqueId}');")
             pl.mysql!!.execute("UPDATE kindle_library SET likes='${likes+1}' WHERE (id='$id');")
             p.sendMessage("${pl.prefix}§aいいね!しました。")
+            lore!![3] = "§dいいね！済"
+            lore[1] = ("§dいいね!数: ${likes+1}いいね!")
         }else{
             pl.mysql!!.execute("UPDATE kindle_user SET likes=false WHERE (book_id='$id');")
             pl.mysql!!.execute("UPDATE kindle_library SET likes='${likes-1}' WHERE (id='$id');")
             p.sendMessage("${pl.prefix}§cいいね!を解除しました。")
+            lore!![3] = "§c未いいね！"
+            lore[1] = ("§dいいね!数: ${likes-1}いいね!")
         }
 
+        meta1.lore = lore
+        item1.itemMeta = meta1
+
+        object : BukkitRunnable(){
+
+            override fun run() {
+                p.closeInventory()
+                p.openInventory(pl.gui.ownBookGUI(item1))
+            }
+
+        }.runTask(pl)
 
     }
 
