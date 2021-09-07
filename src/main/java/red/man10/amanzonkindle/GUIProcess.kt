@@ -31,7 +31,7 @@ class GUIProcess(val pl: AmanzonKindle) {
         val author = ItemStackA(Material.NAME_TAG, 0, 1, "§a§l著者名で本を探す").build()
         inv.setItem(14, author)
 
-        val cate = ItemStackA(Material.WRITABLE_BOOK, 0, 1, "§a§lカテゴリで本を探す").build()
+        val cate = ItemStackA(Material.BOOK, 0, 1, "§a§lカテゴリで本を探す").build()
         inv.setItem(16, cate)
 
         val dlrank = ItemStackA(Material.COMPASS, 0, 1, "§a§lDL数順で本を探す").build()
@@ -40,8 +40,11 @@ class GUIProcess(val pl: AmanzonKindle) {
         val like = ItemStackA(Material.REDSTONE, 0, 1, "§a§lいいね!数順で本を探す").build()
         inv.setItem(30, like)
 
-        val publish = ItemStackA(Material.DISPENSER, 1, 1, "§a§l本を出版する").build()
+        val publish = ItemStackA(Material.DISPENSER, 0, 1, "§a§l本を出版する").build()
         inv.setItem(32, publish)
+
+        val book = ItemStackA(Material.WRITABLE_BOOK, 0, 1, "§a§l未記入の本を買う", mutableListOf("${pl.util.format(pl.bookbal)}円")).build()
+        inv.setItem(40, book)
 
         //val mypage = ItemStackA(Material.CHEST, 0, 1, "§a§lマイページ").build()
         //inv.setItem(34, mypage)
@@ -127,7 +130,7 @@ class GUIProcess(val pl: AmanzonKindle) {
 
             }
             .text("カテゴリをここに入力") //sets the text the GUI should start with
-            .itemLeft(ItemStackA(Material.PAPER, 1, 1, "", pl.catelist).build()) //use a custom item for the first slot
+            .itemLeft(ItemStackA(Material.PAPER, 0, 1, "", pl.catelist).build()) //use a custom item for the first slot
             .title("出版処理") //set the title of the GUI (only works in 1.14+)
             .plugin(pl) //set the plugin instance
             .open(p) //opens the GUI for the player provided

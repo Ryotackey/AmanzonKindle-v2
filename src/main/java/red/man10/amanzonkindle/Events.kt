@@ -7,6 +7,7 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.inventory.InventoryAction
 import org.bukkit.event.inventory.InventoryClickEvent
+import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.BookMeta
 import javax.swing.Action
 
@@ -103,6 +104,23 @@ class Events(val pl: AmanzonKindle): Listener {
                         p.closeInventory()
                         val get = GetOwnBook(pl, p)
                         get.start()
+                    }
+
+                    "§a§l未記入の本を買う"->{
+                        p.closeInventory()
+                        if (pl.v!!.getBalance(p.uniqueId) < pl.bookbal){
+                            p.sendMessage("${pl.prefix}§cお金が足りないので買えません。(値段: ${pl.util.format(pl.bookbal)}円)")
+                            return
+                        }
+                        pl.v!!.withdraw(p.uniqueId, pl.bookbal)
+                        if (p.inventory.firstEmpty() == -1){
+                            p.location.world!!.dropItem(p.location, ItemStack(Material.WRITABLE_BOOK))
+                            p.sendMessage("${pl.prefix}§cインベントリが埋まっていたので足元に落としました。")
+                        }else{
+                            p.inventory.addItem(ItemStack(Material.WRITABLE_BOOK))
+                        }
+                        p.sendMessage("${pl.prefix}§a購入しました。")
+                        return
                     }
 
                 }

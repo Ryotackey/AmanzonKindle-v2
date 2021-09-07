@@ -24,6 +24,8 @@ class AmanzonKindle: JavaPlugin() {
 
     var cost = 10000.0
 
+    var bookbal = 500.0
+
     override fun onEnable() {
         saveDefaultConfig()
 
@@ -51,6 +53,8 @@ class AmanzonKindle: JavaPlugin() {
         if (config.contains("category")) catelist = config.getList("category") as MutableList<String>
 
         if (config.contains("publish_cost")) cost = config.getDouble("publish_cost")
+
+        if (config.contains("book_cost")) cost = config.getDouble("book_cost")
     }
 
 }

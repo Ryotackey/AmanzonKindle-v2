@@ -1,5 +1,6 @@
 mysql:
 publish_cost: 10000
+book_cost: 500
 category:
   - "小説"
   - "エッセイ"
