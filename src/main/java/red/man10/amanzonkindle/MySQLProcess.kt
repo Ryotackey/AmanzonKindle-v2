@@ -54,9 +54,9 @@ class SearchBook(val pl: AmanzonKindle, val p: Player, val bypass: Boolean, val 
     override fun run() {
 
         val rs = if (bypass){
-            pl.mysql!!.query("SELECT * FROM kindle_library where $column like '%$key%';")?: return
+            pl.mysql!!.query("SELECT * FROM kindle_library where $column like '%$key%' ORDER BY id DESC;")?: return
         }else{
-            pl.mysql!!.query("SELECT * FROM kindle_library where public=true and $column like '%$key%';")?: return
+            pl.mysql!!.query("SELECT * FROM kindle_library where public=true and $column like '%$key%' ORDER BY id DESC;")?: return
         }
 
         pl.pagemap[p] = pl.util.createBookList(rs)
@@ -78,9 +78,9 @@ class GetBook(val pl: AmanzonKindle, val p: Player, val bypass: Boolean): Thread
     override fun run() {
 
         val rs = if (bypass){
-            pl.mysql!!.query("SELECT * FROM kindle_library;")?: return
+            pl.mysql!!.query("SELECT * FROM kindle_library ORDER BY id DESC;")?: return
         }else{
-            pl.mysql!!.query("SELECT * FROM kindle_library where public=true;")?: return
+            pl.mysql!!.query("SELECT * FROM kindle_library where public=true ORDER BY id DESC;")?: return
         }
 
         pl.pagemap[p] = pl.util.createBookList(rs)
@@ -159,7 +159,7 @@ class GetOwnBook(val pl: AmanzonKindle, val p: Player): Thread(){
 
     override fun run() {
 
-        val rs = pl.mysql!!.query("select * from kindle_user where uuid='${p.uniqueId}';")?: return
+        val rs = pl.mysql!!.query("select * from kindle_user where uuid='${p.uniqueId}' ORDER BY id DESC;")?: return
 
         val list = mutableListOf<ItemStack>()
 
@@ -249,7 +249,7 @@ class LikeProcess(val pl: AmanzonKindle, val p: Player, val item: ItemStack, val
             lore!![3] = "§dいいね！済"
             lore[1] = ("§dいいね!数: ${likes+1}いいね!")
         }else{
-            pl.mysql!!.execute("UPDATE kindle_user SET likes=false WHERE (book_id='$id');")
+            pl.mysql!!.execute("UPDATE kindle_user SET likes=false WHERE (book_id='$id' and uuid='${p.uniqueId}');")
             pl.mysql!!.execute("UPDATE kindle_library SET likes='${likes-1}' WHERE (id='$id');")
             p.sendMessage("${pl.prefix}§cいいね!を解除しました。")
             lore!![3] = "§c未いいね！"
